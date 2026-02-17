@@ -42,6 +42,33 @@ dependencies {
 
     testCompileOnly("org.jetbrains:annotations:${JETBRAINS_ANNOTATIONS_VERSION}")
     testRuntimeOnly("cpw.mods:bootstraplauncher:${BOOTSTRAPLAUNCHER_VERSION}")
+
+     // Core LWJGL Libraries (Unblock them from transitive=false)
+    [
+        "org.lwjgl:lwjgl:3.3.1",
+        "org.lwjgl:lwjgl-glfw:3.3.1",
+        "org.lwjgl:lwjgl-opengl:3.3.1",
+        "org.lwjgl:lwjgl-stb:3.3.1"
+    ].each { dep ->
+        implementation(dep) { transitive = true }
+    }
+
+    // Natives for ALL platforms (Essential for your first release)
+    def lwjglNatives = [
+        "natives-windows", "natives-windows-x86", "natives-windows-arm64",
+        "natives-linux", "natives-linux-arm64", "natives-linux-arm32",
+        "natives-macos", "natives-macos-arm64"
+    ]
+
+    lwjglNatives.each { platform ->
+        runtimeOnly "org.lwjgl:lwjgl::${platform}"
+        runtimeOnly "org.lwjgl:lwjgl-glfw::${platform}"
+        runtimeOnly "org.lwjgl:lwjgl-opengl::${platform}"
+        runtimeOnly "org.lwjgl:lwjgl-stb::${platform}"
+    }
+
+    // Fixes the "symbol: class Nullable" error
+    //compileOnly("org.jetbrains:annotations:${JETBRAINS_ANNOTATIONS_VERSION}")
 }
 
 task sourcesJar(type: Jar) {

@@ -79,7 +79,7 @@ ext {
     INSTALLER_TOOLS = 'net.minecraftforge:installertools:1.4.1'
     JAR_SPLITTER = 'net.minecraftforge:jarsplitter:1.1.4'
     FART = 'net.minecraftforge:ForgeAutoRenamingTool:0.1.22:all'
-    MIN_TAG_FOR_CHANGELOG = '41.0'
+    MIN_TAG_FOR_CHANGELOG = '43.0'
 }
 
 println('Version: ' + VERSION +
@@ -174,17 +174,17 @@ subprojects {
                 pom {
                     name = project.name
                     description = 'Modifactions to Minecraft to enable mod developers.'
-                    url = 'https://github.com/MinecraftForge/MinecraftForge'
+                    url = 'https://github.com/SuperGabe5/PowerForge'
 
                     scm {
-                        url = 'https://github.com/MinecraftForge/MinecraftForge'
-                        connection = 'scm:git:git://github.com/MinecraftForge/MinecraftForge.git'
-                        developerConnection = 'scm:git:git@github.com:MinecraftForge/MinecraftForge.git'
+                        url = 'https://github.com/SuperGabe5/PowerForge'
+                        connection = 'scm:git:git://github.com/SuperGabe5/PowerForge.git'
+                        developerConnection = 'scm:git:git@github.com:SuperGabe5/PowerForge.git'
                     }
 
                     issueManagement {
                         system = 'github'
-                        url = 'https://github.com/MinecraftForge/MinecraftForge/issues'
+                        url = 'https://github.com/SuperGabe5/MinecraftForge/issues'
                     }
 
                     licenses {

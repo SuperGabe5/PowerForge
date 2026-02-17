@@ -26,10 +26,15 @@ public enum EarlyProgressVisualization {
     }
 
     public Runnable accept(final Dist dist, final boolean isData, @Nullable String mcVersion) {
-//        visualization = !isData && dist.isClient() && Boolean.parseBoolean(System.getProperty("fml.earlyprogresswindow", "true")) ? new ClientVisualization() : new NoVisualization();
-        visualization = new NoVisualization();
+    // We check if it's not data generation and if we are on the client side
+        if (!isData && dist.isClient()) {
+            visualization = new ClientVisualization();
+        } else {
+            visualization = new NoVisualization();
+        }
         return visualization.start(mcVersion);
     }
+
 
     public long handOffWindow(final IntSupplier width, final IntSupplier height, final Supplier<String> title, final LongSupplier monitor) {
         return visualization.handOffWindow(width, height, title, monitor);
