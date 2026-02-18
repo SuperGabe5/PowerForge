@@ -41,9 +41,11 @@ class ClientVisualization implements EarlyProgressVisualization.Visualization {
 
         // 2. SWING UI: Create the actual visible interface
         SwingUtilities.invokeLater(() -> {
-            frame = new JFrame("FML Early Loading Progress");
+            frame = new JFrame("FML Early Loading Process");
             frame.setSize(screenWidth, screenHeight);
-            frame.setUndecorated(true);
+            frame.setUndecorated(false);
+            frame.setResizable(false);
+            frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
             frame.setLocationRelativeTo(null);
 
             JPanel panel = new JPanel(null) {
@@ -64,6 +66,7 @@ class ClientVisualization implements EarlyProgressVisualization.Visualization {
             progressBar.setBorderPainted(false);
             progressBar.setStringPainted(true);
             progressBar.setFont(new Font("SansSerif", Font.BOLD, 10));
+            progressBar.setString("PowerForge is Working!");
 
             panel.add(progressBar);
             frame.add(panel);
