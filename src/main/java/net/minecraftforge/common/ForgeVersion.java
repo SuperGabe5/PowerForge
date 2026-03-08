@@ -23,7 +23,7 @@ public class ForgeVersion
     //This number is incremented every minecraft release, never reset
     public static final int minorVersion    = 13;
     //This number is incremented every time a interface changes or new major feature is added, and reset every Minecraft version
-    public static final int revisionVersion = 4;
+    public static final int revisionVersion = 5;
     //This number is incremented every time Jenkins builds Forge, and never reset. Should always be 0 in the repo code.
     public static final int buildVersion    = 0;
 
@@ -78,72 +78,10 @@ public class ForgeVersion
 
     public static void startVersionCheck()
     {
-        new Thread("Forge Version Check")
-        {
-            @SuppressWarnings("unchecked")
-            @Override
-            public void run()
-            {
-                try
-                {
-                    URL url = new URL("http://files.minecraftforge.net/maven/net/minecraftforge/forge/promotions_slim.json");
-                    InputStream con = url.openStream();
-                    String data = new String(ByteStreams.toByteArray(con));
-                    con.close();
+        // Immediately set to BETA to skip remote metadata fetching
+        status = BETA;
+        target = getVersion();
 
-                    Map<String, Object> json = new Gson().fromJson(data, Map.class);
-                    //String homepage = (String)json.get("homepage");
-                    Map<String, String> promos = (Map<String, String>)json.get("promos");
-
-                    String rec = promos.get(MinecraftForge.MC_VERSION + "-recommended");
-                    String lat = promos.get(MinecraftForge.MC_VERSION + "-latest");
-                    ArtifactVersion current = new DefaultArtifactVersion(getVersion());
-
-                    if (rec != null)
-                    {
-                        ArtifactVersion recommended = new DefaultArtifactVersion(rec);
-                        int diff = recommended.compareTo(current);
-
-                        if (diff == 0)
-                            status = UP_TO_DATE;
-                        else if (diff < 0)
-                        {
-                            status = AHEAD;
-                            if (lat != null)
-                            {
-                                if (current.compareTo(new DefaultArtifactVersion(lat)) < 0)
-                                {
-                                    status = OUTDATED;
-                                    target = lat;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            status = OUTDATED;
-                            target = rec;
-                        }
-                    }
-                    else if (lat != null)
-                    {
-                        if (current.compareTo(new DefaultArtifactVersion(lat)) < 0)
-                        {
-                            status = BETA_OUTDATED;
-                            target = lat;
-                        }
-                        else
-                            status = BETA;
-                    }
-                    else
-                        status = BETA;
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                    status = FAILED;
-                }
-            }
-        }.start();
+        // We don't start the thread at all to keep things snappy
+        System.out.println("Forge Version Check: Skipping remote fetch, status set to BETA for Alpha/Beta testing.");
     }
-}
-

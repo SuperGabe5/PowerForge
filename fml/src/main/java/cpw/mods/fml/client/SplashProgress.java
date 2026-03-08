@@ -141,7 +141,7 @@ public class SplashProgress
 
         final ResourceLocation fontLoc = new ResourceLocation(getString("fontTexture", "textures/font/ascii.png"));
         final ResourceLocation logoLoc = new ResourceLocation(getString("logoTexture", "textures/gui/title/mojang.png"));
-        final ResourceLocation forgeLoc = new ResourceLocation(getString("forgeTexture", "fml:textures/gui/forge.gif"));
+        final ResourceLocation forgeLoc = new ResourceLocation(getString("forgeTexture", "fml:textures/gui/powerforge.gif"));
 
         File miscPackFile = new File(Minecraft.getMinecraft().mcDataDir, getString("resourcePackPath", "resources"));
 
@@ -256,6 +256,33 @@ public class SplashProgress
                     glVertex2f(320 + 256, 240 - 256);
                     glEnd();
                     glDisable(GL_TEXTURE_2D);
+
+                    // --- Modern UI Info (Top Corner Safe Zones) ---
+                    int padding = 25; // Clears rounded corners/WM borders
+                    float topY = 240 - (h / 2) + padding;
+
+                    glEnable(GL_TEXTURE_2D);
+                    setColor(fontColor);
+
+                    // Top Left: Forge Version
+                    glPushMatrix();
+                    float versionX = 320 - (w / 2) + padding;
+                    glTranslatef(versionX, topY, 0);
+                    fontRenderer.drawString("PowerForge " + Loader.instance().getFMLVersionString(), 0, 0, 0);
+                    glPopMatrix();
+
+                    // Top Right: RAM Usage (1.11 backport style)
+                    glPushMatrix();
+                    long maxM = Runtime.getRuntime().maxMemory() / 1024 / 1024;
+                    long usedM = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
+                    String memS = usedM + "MB / " + maxM + "MB";
+                    float memX = 320 + (w / 2) - padding - fontRenderer.getStringWidth(memS);
+                    glTranslatef(memX, topY, 0);
+                    fontRenderer.drawString(memS, 0, 0, 0);
+                    glPopMatrix();
+
+                    glDisable(GL_TEXTURE_2D);
+                    // --- End Modern UI Info ---
 
                     // bars
                     if(first != null)
